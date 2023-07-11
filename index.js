@@ -1,37 +1,39 @@
-'use strict';
-
-const {MyMath} = require('./MyMath.js');
-const {Component} = require('./Component.js');
-
-const sum2n2 = MyMath.sum(2, 2);
-console.log(sum2n2);
-const multy3n5 = MyMath.multy(3, 5);
-console.log(multy3n5);
-
-const component = new Component();
-console.log(component.render());
-
 /*
-require(path)
 
-HOW REQUIRE WORKS
+Кожна функція у ноді буде представлена у 3-х варіантах:
 
-resolving -> loading -> wrappening -> evaluation -> caching
-
-resolving - шукає той файл, який ми вказали у шляху
-loading - читання знайденого файлу
-wrappening - огортання в нодівський контекст
-evaluation - виконання коду
-caching - зберігаємо результат роботи модулю
-
-RESOLVING:
-    1) Core modules
-    2) File
-        *.js || *.json
-    3) Directory
-        3.1) package.json -> "main"
-        3.2) index.js || index.json
-    4) node_modules
-    5) throw new Error()
+1. звичайний readFile - він нам не підходить
+2. readFileAsync - він теоретично нам підходить, але з ним не зручно
+3. readFile на промісах - він нам підходить
 
 */
+
+
+/*
+
+1. readFile - читає вміст файлу
+2. writeFile - записувати зміни у файл (файл перезаписується!!!)
+3. appendFile - дописує зміни
+
+*/
+
+const fs = require('fs').promises;
+
+const p = fs.readFile('./Folder/text.txt', 'utf-8'); // 1
+p.then((data) => {
+    const newData = `OLD data: ${data} and NEW data: 'Hello!!!!'`;
+    //fs.writeFile('./newFile.txt', newData, 'utf-8'); // 2
+    fs.appendFile('./newFile.txt', newData, 'utf-8');
+})
+
+
+// Задача: маємо декілька текстових файлів, потрібно об'єднати їх
+
+fs.readFile('./file1.txt', 'utf-8')
+.then((dataFromFile1) => { // дані з файлу 1
+    fs.readFile('./file2.txt', 'utf-8')
+    .then((dataFromFile2) => { //дані з файлу 2
+        const content = `${dataFromFile1} ${dataFromFile2}`;
+        fs.appendFile('./file3.txt', content, 'utf-8');
+    })
+})
