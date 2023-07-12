@@ -2,10 +2,11 @@
   "name": "node-welcome",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "start": "node ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx webpack serve --open --mode development",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack --mode development"
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,10 @@
   "homepage": "https://github.com/ONL-JS-FE2023-1/node-welcome#readme",
   "dependencies": {
     "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }
